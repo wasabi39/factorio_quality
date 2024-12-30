@@ -93,7 +93,8 @@ def generate_transition_matrix():
 def calculate_iterations(number_of_iterations=1):
     transition_matrix = generate_transition_matrix()
     starting_distribution = np.array([1,0,0,0,0,0,0,0,0,0])
-    final_distribution = starting_distribution @ np.linalg.matrix_power(transition_matrix, number_of_iterations)
+    #IMPORTANT: A full cycle is 2 iterations, because the assembly machine and the recycling machine are in a cycle. So we lift the maftrix to the power of 2 * number_o_iterations.
+    final_distribution = starting_distribution @ np.linalg.matrix_power(transition_matrix, 2 * number_of_iterations)
     #Note: Entry 0 in our distribution is the percentage of quality 1 items that just left the recycling machine,
     #entry 5 is the percentage of quality of 1 items that just left the assembly machine.
     #We add those together to get the total number of quality 1 items. Similarly for the other qualities.
