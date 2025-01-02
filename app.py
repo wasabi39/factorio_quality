@@ -1,6 +1,7 @@
 import streamlit as st
 
 from computation_request import ComputationRequest
+from factorio_quality_calculator import run_simulation
 
 #Title of the app
 st.title("Factorio Quality Calculator")
@@ -56,14 +57,14 @@ if st.button("Calculate"):
         quality_3_count=quality_3_count,
         quality_4_count=quality_4_count)
         
-    if quality_of_quality_modules == "Square":
-        result = 2 ** 2
-    elif quality_of_quality_modules == "Double":
-        result = 2 * 2
-    else:
-        result = 2 ** 3
-
-    st.success(f"The result of the simulation is: {result}")
+    result_request = run_simulation(computation_request)
+    st.success(f"Simulation completed.")
+    st.success(f"After {number_of_iterations} iterations you can expect:")
+    st.success(f"{result_request.quality_1_count} normal quality items.")
+    st.success(f"{result_request.quality_2_count} uncommon quality items.")
+    st.success(f"{result_request.quality_3_count} rare quality items.")
+    st.success(f"{result_request.quality_4_count} epic quality items.")
+    st.success(f"{result_request.quality_5_count} legendary quality items.")
 
 #Sidebar for extra functionality
 st.sidebar.header("Extra Tools")

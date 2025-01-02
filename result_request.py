@@ -5,9 +5,11 @@ from pydantic import BaseModel
 #2) Even if I never create an API, it makes the code cleaner, 
 #more readable and helps us somewhat keep the code separated 
 #into a frontend and a backend.
+#Note: The counts are floats, because they're expected values,
+#which aren't necessarily integers.
 class ResultRequest(BaseModel):
-    quality_1_count: int
-    quality_2_count: int
-    quality_3_count: int
-    quality_4_count: int
-    quality_5_count: int
+    quality_1_count: float
+    quality_2_count: float
+    quality_3_count: float
+    quality_4_count: float
+    quality_5_count: float

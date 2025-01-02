@@ -114,12 +114,12 @@ def calculate_iterations(number_of_iterations: int, transition_matrix: np.array)
                                    quality_5_count=final_distribution[4] + final_distribution[9])
     return result_request
 
-def run_simulation(computation_request: ComputationRequest) -> result_request:
+def run_simulation(computation_request: ComputationRequest) -> ResultRequest:
     transition_matrix = generate_transition_matrix(computation_request)
-    return calculate_iterations(ComputationRequest.number_of_iterations, 
+    return calculate_iterations(computation_request.number_of_iterations, 
                                 transition_matrix)
 
 
 np.set_printoptions(suppress=True)
-print(calculate_iterations(number_of_iterations=10))
+#print(calculate_iterations(number_of_iterations=10))
 #print(generate_transition_matrix())

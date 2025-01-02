@@ -6,7 +6,7 @@ from pydantic import BaseModel
 #more readable and helps us somewhat keep the code separated 
 #into a frontend and a backend.
 class ComputationRequest(BaseModel):
-    productivity_boost_from_research: int
+    productivity_boost_from_research: float
     machine_type: str
     quality_of_production_modules: str
     number_of_productivity_modules: int
