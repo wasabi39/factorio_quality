@@ -1,4 +1,7 @@
 import numpy as np
+from result_request import ResultRequest
+from computation_request import ComputationRequest
+import result_request
 #IMPORTANT: Quality and production chips are numbered from 1 to 5, with 1 being the worst and 5 being the best.
 #Do not use 0-indexed numbers for the quality and production chips.
 #The math used in this code is mainly theory about Markov chains, see https://www.probabilitycourse.com/chapter11/11_2_1_introduction.php
@@ -12,14 +15,11 @@ def get_quality_chip_score():
 def get_productivity_chip_score():
     return [0.1, 0.13, 0.16, 0.19, 0.25]
 
-def get_productivity_research_boost():
-    return 1.2
-
-def calculate_productivity_boost(number_of_productivity_chips=0, type_of_productivity_chip=5, recycling=False, fifty_percent_boost=False):
+def calculate_productivity_boost(number_of_productivity_chips=0, type_of_productivity_chip=5, recycling=False, fifty_percent_boost=False, research_boost=0):
     if recycling:
         return -0.75 #recyclers always destroy 75% of the input, which is effectively a -75% productivity boost
     productivity_boost_from_chips = number_of_productivity_chips * get_productivity_chip_score()[type_of_productivity_chip - 1]
-    productivity_boost = get_productivity_research_boost() + productivity_boost_from_chips + 0.5 * fifty_percent_boost
+    productivity_boost = research_boost + productivity_boost_from_chips + 0.5 * fifty_percent_boost
     return min(productivity_boost, 3) #productivity boost is capped at +300%
 
 def calculate_quality_boost(number_of_quality_chips=5, type_of_quality_boost=5):
@@ -62,7 +62,7 @@ def concatenate_transition_matrices(upper_left_of_transition_matrix, upper_right
         axis=0
     )
 
-def generate_transition_matrix():
+def generate_transition_matrix(computation_request: ComputationRequest):
     #See https://wiki.factorio.com/Quality for information on how the transition matrix is constructed.
     upper_left_of_transition_matrix = np.array([
                           [0,0,0,0,0],
@@ -77,33 +77,48 @@ def generate_transition_matrix():
                           [0,0,0,0,0],
                           [0,0,0,0,1]])
     
-    productivity_boost_for_assembly = calculate_productivity_boost(number_of_productivity_chips=0, type_of_productivity_chip=5,recycling=False, fifty_percent_boost=True)
-    quality_boost_for_assembly = calculate_quality_boost(number_of_quality_chips=5, type_of_quality_boost=5)
+    productivity_boost_for_assembly = calculate_productivity_boost(
+        number_of_productivity_chips=computation_request.number_of_productivity_modules,
+        type_of_productivity_chip=5, #todo update
+        recycling=False, 
+        fifty_percent_boost=True, #todo update
+        research_boost=computation_request.productivity_boost_from_research)
+    quality_boost_for_assembly = calculate_quality_boost(number_of_quality_chips=computation_request.number_of_quality_modules, 
+                                                         type_of_quality_boost=5) #todo update
 
     upper_right_of_transition_matrix = get_part_of_transition_matrix(productivity_boost_for_assembly, quality_boost_for_assembly, recycling=False)
 
     productivity_boost_for_recycling = calculate_productivity_boost(recycling=True, fifty_percent_boost=False)
-    quality_boost_for_recycling = calculate_quality_boost(number_of_quality_chips=4, type_of_quality_boost=5)
+    #I've chosen to hardcode the recycling step, since noone will realistically
+    #want to experiment with it.
+    quality_boost_for_recycling = calculate_quality_boost(
+                                                    number_of_quality_chips=4, 
+                                                    type_of_quality_boost=5)
 
     lower_left_of_transition_matrix = get_part_of_transition_matrix(productivity_boost_for_recycling, quality_boost_for_recycling, recycling=True)
 
     transition_matrix = concatenate_transition_matrices(upper_left_of_transition_matrix, upper_right_of_transition_matrix, lower_left_of_transition_matrix, bottom_right_of_transition_matrix)
     return transition_matrix
 
-def calculate_iterations(number_of_iterations=1):
-    transition_matrix = generate_transition_matrix()
+def calculate_iterations(number_of_iterations: int, transition_matrix: np.array) -> ResultRequest:
     starting_distribution = np.array([1,0,0,0,0,0,0,0,0,0])
     #IMPORTANT: A full cycle is 2 iterations, because the assembly machine and the recycling machine are in a cycle. So we lift the maftrix to the power of 2 * number_o_iterations.
     final_distribution = starting_distribution @ np.linalg.matrix_power(transition_matrix, 2 * number_of_iterations)
     #Note: Entry 0 in our distribution is the percentage of quality 1 items that just left the recycling machine,
     #entry 5 is the percentage of quality of 1 items that just left the assembly machine.
     #We add those together to get the total number of quality 1 items. Similarly for the other qualities.
-    final_distribution_summarized = np.array([final_distribution[0] + final_distribution[5],
-                                   final_distribution[1] + final_distribution[6],
-                                   final_distribution[2] + final_distribution[7],
-                                   final_distribution[3] + final_distribution[8],
-                                   final_distribution[4] + final_distribution[9]])
-    return final_distribution_summarized
+    result_request = ResultRequest(quality_1_count=final_distribution[0] + final_distribution[5],
+                                   quality_2_count=final_distribution[1] + final_distribution[6],
+                                   quality_3_count=final_distribution[2] + final_distribution[7],
+                                   quality_4_count=final_distribution[3] + final_distribution[8],
+                                   quality_5_count=final_distribution[4] + final_distribution[9])
+    return result_request
+
+def run_simulation(computation_request: ComputationRequest) -> result_request:
+    transition_matrix = generate_transition_matrix(computation_request)
+    return calculate_iterations(ComputationRequest.number_of_iterations, 
+                                transition_matrix)
+
 
 np.set_printoptions(suppress=True)
 print(calculate_iterations(number_of_iterations=10))

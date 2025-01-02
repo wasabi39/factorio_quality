@@ -9,7 +9,7 @@ st.title("Factorio Quality Calculator")
 st.header("Make a Calculation")
 productivity_boost_from_research = st.number_input(
     "Enter your productivity boost from research" + 
-    " as a percentage (e.g. 10 for 10%):", value=0)
+    " as a percentage (e.g. 10 for 10%):", value=0) / 100
 machine_type = st.selectbox(
     "Choose a machine type:", 
     ["Electromagnetic plant", "Other (e.g. Assembling machine 3)"])
