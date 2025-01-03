@@ -13,9 +13,17 @@ from frontend.computation_request import ComputationRequest
 
 
 def get_quality_chip_score():
+    """
+    Returns a list of quality boosts for each type of quality chip.
+    Order is from worst to best.
+    """
     return [0.025, 0.032, 0.04, 0.047, 0.062]
 
 def get_productivity_chip_score():
+    """
+    Returns a list of productivity boosts for each type of productivity chip.
+    Order is from worst to best.
+    """
     return [0.1, 0.13, 0.16, 0.19, 0.25]
 
 def calculate_productivity_boost(number_of_productivity_chips=0, 
@@ -23,6 +31,9 @@ def calculate_productivity_boost(number_of_productivity_chips=0,
                                  recycling=False, 
                                  fifty_percent_boost=False, 
                                  research_boost=0):
+    """
+    Calculates the total productivity boost from prod chips, research etc.
+    """
     if recycling:
         #Recyclers always destroy 75% of the input, 
         #which is effectively a -75% productivity boost.
@@ -33,6 +44,9 @@ def calculate_productivity_boost(number_of_productivity_chips=0,
     return min(prod_boost, 3) #productivity boost is capped at +300%
 
 def calculate_quality_boost(number_of_quality_chips=5, type_of_quality_boost=5):
+    """
+    Returns the quality boost from quality chips.
+    """
     quality_boost_from_chips = (number_of_quality_chips * 
                                 get_quality_chip_score()[type_of_quality_boost - 1])
     return quality_boost_from_chips
@@ -155,13 +169,16 @@ def generate_transition_matrix(computation_request: ComputationRequest):
     
     return transition_matrix
 
-def calculate_iterations(number_of_iterations: int, transition_matrix: np.array) -> ResultRequest:
-    starting_distribution = np.array([1,0,0,0,0,0,0,0,0,0])
+def calculate_iterations(iterations: int, transition_matrix: np.array) -> ResultRequest:
+    """
+    Returns the expected number of items of each quality after a number of iterations.
+    """
+    starting_distribution = np.array([1,0,0,0,0,0,0,0,0,0]) #todo update
     #IMPORTANT: A full cycle is 2 iterations, 
     #because the assembly machine and the recycling machine are in a cycle. 
-    # So we lift the matrix to the power of 2 * number_o_iterations.
+    # So we lift the matrix to the power of 2 * number_of_iterations.
     distribution = starting_distribution @ \
-        np.linalg.matrix_power(transition_matrix, 2 * number_of_iterations)
+        np.linalg.matrix_power(transition_matrix, 2 * iterations)
     #Note: Entry 0 in our distribution is the percentage of quality 1 items
     #that just left the recycling machine,
     #entry 5 is the percentage of quality of 1 items that just left the assembly machine.
