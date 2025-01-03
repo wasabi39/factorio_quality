@@ -7,9 +7,15 @@ To run the Streamlit app, run ```docker-compose up --build```. Then the project 
 
 # Todo
 Make frontend functional
+
 Add constraints on inputs (e.g. no negative numbers)
+
 Unit tests
+
 API / separation of concerns
+
 Proper directory structure
+
 Adjust Pylint Github workflow to suit the project's needs better.
+
 Cache dependencies in Dockerfile to save build time.
