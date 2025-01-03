@@ -40,7 +40,6 @@ quality_4_count = st.number_input(
     "Enter the count of epic quality items you start out with:", value=0)
 
 
-#TODO Perform calculation
 result = None
 if st.button("Calculate"):
     computation_request = ComputationRequest(
