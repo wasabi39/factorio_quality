@@ -1,7 +1,6 @@
 import streamlit as st
-
-from computation_request import ComputationRequest
-from factorio_quality_calculator import run_simulation
+from frontend.computation_request import ComputationRequest
+from backend.backend import run_simulation
 
 #Title of the app
 st.title("Factorio Quality Calculator")
