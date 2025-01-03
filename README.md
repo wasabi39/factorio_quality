@@ -14,8 +14,8 @@ Unit tests
 
 API / separation of concerns
 
-Proper directory structure
+~~Proper directory structure~~
 
-Adjust Pylint Github workflow to suit the project's needs better.
+~~Adjust Pylint Github workflow to suit the project's needs better.~~
 
-Cache dependencies in Dockerfile to save build time.
+~~Cache dependencies in Dockerfile to save build time.~~
