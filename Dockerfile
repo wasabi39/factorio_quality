@@ -13,6 +13,8 @@ COPY . .
 #This is needed until we develop an API.
 ENV PYTHONPATH=/app
 
+RUN python -m unittest discover -s tests
+
 EXPOSE 5000
 
 CMD ["streamlit", "run", "frontend/app.py", "--server.port=5000"]
