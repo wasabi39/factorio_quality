@@ -126,6 +126,13 @@ def get_bottom_right_of_transition_matrix():
         [0,0,0,0,1]
     ])
 
+def is_electromagnetic_plant(machine_type: str):
+    """
+    Returns True if the machine type is an electromagnetic plant, False otherwise.
+    """
+    return machine_type == "Electromagnetic plant"
+
+
 def generate_transition_matrix(computation_request: ComputationRequest):
     """
     Returns the transition matrix for the Markov chain.
@@ -139,7 +146,7 @@ def generate_transition_matrix(computation_request: ComputationRequest):
         number_of_productivity_chips=computation_request.number_of_productivity_modules,
         type_of_productivity_chip=5, #todo update
         recycling=False, 
-        fifty_percent_boost=True, #todo update
+        fifty_percent_boost=is_electromagnetic_plant(computation_request.machine_type), #todo update
         research_boost=computation_request.productivity_boost_from_research)
     quality_boost_assembly = calculate_quality_boost(number_of_quality_chips=
                                                      computation_request.number_of_quality_modules,
