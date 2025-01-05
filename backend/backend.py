@@ -1,16 +1,18 @@
+"""
+IMPORTANT: Quality and production chips are numbered from 1 to 5, 
+with 1 being the worst and 5 being the best.
+Do not use 0-indexed numbers for the quality and production chips.
+The math used in this code is mainly theory about Markov chains, 
+see https://www.probabilitycourse.com/chapter11/11_2_1_introduction.php
+Productivity boost refers to the percentage *added* to the productivity of the machine.
+So a productivity boost of 1.2 means that machine produces 120% *EXTRA* items 
+compared to the base machine. Same thing goes for quality boost.
+"""
+
+
 import numpy as np
 from backend.result_request import ResultRequest
 from frontend.computation_request import ComputationRequest
-
-#IMPORTANT: Quality and production chips are numbered from 1 to 5, 
-#with 1 being the worst and 5 being the best.
-#Do not use 0-indexed numbers for the quality and production chips.
-#The math used in this code is mainly theory about Markov chains, 
-#see https://www.probabilitycourse.com/chapter11/11_2_1_introduction.php
-#Productivity boost refers to the percentage *added* to the productivity of the machine.
-#So a productivity boost of 1.2 means that machine produces 120% *EXTRA* items 
-#compared to the base machine. Same thing goes for quality boost.
-
 
 def get_quality_chip_score():
     """
@@ -126,12 +128,19 @@ def get_bottom_right_of_transition_matrix():
         [0,0,0,0,1]
     ])
 
-def is_electromagnetic_plant(machine_type: str):
+def is_electromagnetic_plant(machine_type: str) -> bool:
     """
     Returns True if the machine type is an electromagnetic plant, False otherwise.
     """
     return machine_type == "Electromagnetic plant"
 
+def chip_type_to_number(chip_type: str) -> int:
+    """
+    Returns the number of the chip type (1-5).
+    """
+    #The .index method will throw a value exception if the chip type is not found,
+    #but the frontend should ensure that the chip type is valid.
+    return ["Normal", "Uncommon", "Rare", "Epic", "Legendary"].index(chip_type) + 1
 
 def generate_transition_matrix(computation_request: ComputationRequest):
     """
@@ -144,13 +153,13 @@ def generate_transition_matrix(computation_request: ComputationRequest):
     
     productivity_boost_assembly = calculate_productivity_boost(
         number_of_productivity_chips=computation_request.number_of_productivity_modules,
-        type_of_productivity_chip=5, #todo update
+        type_of_productivity_chip=chip_type_to_number(computation_request.quality_of_production_modules), 
         recycling=False, 
-        fifty_percent_boost=is_electromagnetic_plant(computation_request.machine_type), #todo update
+        fifty_percent_boost=is_electromagnetic_plant(computation_request.machine_type),
         research_boost=computation_request.productivity_boost_from_research)
     quality_boost_assembly = calculate_quality_boost(number_of_quality_chips=
                                                      computation_request.number_of_quality_modules,
-                                                     type_of_quality_boost=5) #todo update
+                                                     type_of_quality_boost=chip_type_to_number(computation_request.quality_of_quality_modules))
 
     upper_right = get_part_of_transition_matrix(productivity_boost_assembly, 
                                                 quality_boost_assembly, 
