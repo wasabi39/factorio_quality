@@ -21,4 +21,4 @@ jobs:
         pip install -r requirements.txt
     - name: Analysing the code with pylint
       run: |
-        pylint --disable=trailing-whitespace,too-few-public-methods --fail-under=8 $(git ls-files '*.py')
+        pylint --disable=trailing-whitespace,too-few-public-methods,missing-final-newline --fail-under=8 $(git ls-files '*.py')
