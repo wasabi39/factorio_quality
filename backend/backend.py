@@ -169,11 +169,22 @@ def generate_transition_matrix(computation_request: ComputationRequest):
     
     return transition_matrix
 
-def calculate_iterations(iterations: int, transition_matrix: np.array) -> ResultRequest:
+def get_starting_distribution(computation_request: ComputationRequest) -> np.array:
+    """
+    Returns the starting distribution for the Markov chain.
+    """
+    #The starting distribution is the number of items of each quality
+    #that the user starts out with.
+    return np.array([computation_request.quality_1_count,
+                     computation_request.quality_2_count,
+                     computation_request.quality_3_count,
+                     computation_request.quality_4_count,
+                     0, 0, 0, 0, 0, 0])
+
+def calculate_iterations(iterations: int, transition_matrix: np.array, starting_distribution: np.array) -> ResultRequest:
     """
     Returns the expected number of items of each quality after a number of iterations.
     """
-    starting_distribution = np.array([1,0,0,0,0,0,0,0,0,0]) #todo update
     #IMPORTANT: A full cycle is 2 iterations, 
     #because the assembly machine and the recycling machine are in a cycle. 
     # So we lift the matrix to the power of 2 * number_of_iterations.
@@ -192,8 +203,12 @@ def calculate_iterations(iterations: int, transition_matrix: np.array) -> Result
     return result_request
 
 def run_simulation(computation_request: ComputationRequest) -> ResultRequest:
+    """
+    Runs the simulation and returns the result.
+    """
     transition_matrix = generate_transition_matrix(computation_request)
+    starting_distribution = get_starting_distribution(computation_request)
     return calculate_iterations(computation_request.number_of_iterations, 
-                                transition_matrix)
-
+                                transition_matrix,
+                                starting_distribution)
 np.set_printoptions(suppress=True)
