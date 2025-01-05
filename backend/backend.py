@@ -153,16 +153,18 @@ def generate_transition_matrix(computation_request: ComputationRequest):
     
     productivity_boost_assembly = calculate_productivity_boost(
         number_of_productivity_chips=computation_request.number_of_productivity_modules,
-        type_of_productivity_chip=chip_type_to_number(computation_request.quality_of_production_modules), 
+        type_of_productivity_chip=chip_type_to_number(
+                                        computation_request.quality_of_production_modules), 
         recycling=False, 
         fifty_percent_boost=is_electromagnetic_plant(computation_request.machine_type),
         research_boost=computation_request.productivity_boost_from_research)
-    quality_boost_assembly = calculate_quality_boost(number_of_quality_chips=
-                                                     computation_request.number_of_quality_modules,
-                                                     type_of_quality_boost=chip_type_to_number(computation_request.quality_of_quality_modules))
+    qual_boost_assembly = calculate_quality_boost(number_of_quality_chips=
+                                                 computation_request.number_of_quality_modules,
+                                                 type_of_quality_boost=chip_type_to_number(
+                                                 computation_request.quality_of_quality_modules))
 
     upper_right = get_part_of_transition_matrix(productivity_boost_assembly, 
-                                                quality_boost_assembly, 
+                                                qual_boost_assembly, 
                                                 recycling=False)
 
     productivity_boost_for_recycling = calculate_productivity_boost(
@@ -197,7 +199,9 @@ def get_starting_distribution(computation_request: ComputationRequest) -> np.arr
                      computation_request.quality_4_count,
                      0, 0, 0, 0, 0, 0])
 
-def calculate_iterations(iterations: int, transition_matrix: np.array, starting_distribution: np.array) -> ResultRequest:
+def calculate_iterations(iterations: int, 
+                         transition_matrix: np.array, 
+                         starting_distribution: np.array) -> ResultRequest:
     """
     Returns the expected number of items of each quality after a number of iterations.
     """

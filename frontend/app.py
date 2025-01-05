@@ -1,3 +1,9 @@
+"""
+Streamlit frontend for the Factorio Quality Calculator.
+Streamlit is a Python library that makes it easy to create web apps 
+for machine learning, data science, etc.
+"""
+
 import streamlit as st
 from frontend.computation_request import ComputationRequest
 from backend.backend import run_simulation

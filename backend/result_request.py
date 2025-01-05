@@ -13,3 +13,4 @@ class ResultRequest(BaseModel):
     quality_3_count: float
     quality_4_count: float
     quality_5_count: float
+    
