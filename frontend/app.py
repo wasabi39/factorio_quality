@@ -16,7 +16,7 @@ st.set_page_config(page_title="Factorio Quality Calculator",
 st.title("Factorio Quality Calculator")
 
 #Input widgets
-st.header("Make a Calculation")
+st.header("Factory Settings")
 productivity_boost_from_research = st.number_input(
     "Enter your productivity boost from research as a percentage (e.g. 10 for 10%):", 
     value=0, 
@@ -70,7 +70,6 @@ quality_4_count = st.number_input("Enter the count of epic quality items you sta
                                   max_value=1000000)
 
 
-result = None
 if st.button("Calculate"):
     computation_request = ComputationRequest(
         productivity_boost_from_research=productivity_boost_from_research,
@@ -101,4 +100,3 @@ if st.button("Calculate"):
 st.sidebar.header("About")
 st.sidebar.page_link(page="https://github.com/wasabi39/factorio_quality", 
                      label="Source code on Github 😊")
-

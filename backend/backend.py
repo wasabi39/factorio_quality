@@ -240,4 +240,3 @@ def run_simulation(computation_request: ComputationRequest) -> ResultRequest:
     return calculate_iterations(computation_request.number_of_iterations, 
                                 transition_matrix,
                                 starting_distribution)
-

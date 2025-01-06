@@ -1,5 +1,5 @@
 """
-Since this a small personal project, I have decided to write
+Since this is a small personal project, I have decided to write
 just a small handful of test cases for the backend.
 The most important things to test are that the end result
 and that the transition matrix are generated correctly.
@@ -8,7 +8,6 @@ the Markov chain calculations do not break during refactoring.
 """
 
 import unittest
-from unittest.mock import patch
 import numpy as np
 
 from backend.backend import generate_transition_matrix, run_simulation
@@ -16,7 +15,9 @@ from frontend.computation_request import ComputationRequest
 
 class TestBackend(unittest.TestCase):
     def test_generate_transition_matrix(self):
-        #Test that the transition matrix is generated properly.
+        """
+        Test that the transition matrix is generated properly.
+        """
         computation_request = ComputationRequest(
             productivity_boost_from_research=0,
             machine_type="Electromagnetic plant",
@@ -44,8 +45,10 @@ class TestBackend(unittest.TestCase):
                                    places=5)
             
     def test_entire_backend(self):
-        #Call the very-top level function in backend.py with a realistic
-        #simulation request to ensure that the entire script is working as intended.
+        """
+        Call the very-top level function in backend.py with a realistic
+        simulation request to ensure that the entire script is working as intended.
+        """
         computation_request = ComputationRequest(
             productivity_boost_from_research=1.50,
             machine_type="Electromagnetic plant",
