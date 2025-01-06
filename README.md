@@ -8,7 +8,7 @@ To run the Streamlit app, run ```docker-compose up --build```. Then the project 
 # Todo
 ~~Make frontend functional~~
 
-Add constraints on inputs (e.g. no negative numbers)
+~~Add constraints on inputs (e.g. no negative numbers)~~
 
 Unit tests (in progress)
 
