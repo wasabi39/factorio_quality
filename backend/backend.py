@@ -199,6 +199,24 @@ def get_starting_distribution(computation_request: ComputationRequest) -> np.arr
                      computation_request.quality_4_count,
                      0, 0, 0, 0, 0, 0])
 
+def calculate_result_request(distribution: np.array) -> ResultRequest:
+    """
+    Returns the expected number of items of each quality after a number of iterations.
+    """
+    #Entry 0 in our distribution is the number of quality 1 items
+    #that just left the recycling machine. Entry 5 is the number of quality 
+    #1 items that just left the assembly machine.
+    #We add those together to get the total number of quality 1 items. 
+    #Similarly for the other qualities.
+    #Final entry is the number of legendary items produced in total,
+    #since we don't recycle legendary items.
+    decimals = 2 #Number of decimals to round to.
+    return ResultRequest(quality_1_count=round(distribution[0] + distribution[5], decimals),
+                         quality_2_count=round(distribution[1] + distribution[6], decimals),
+                         quality_3_count=round(distribution[2] + distribution[7], decimals),
+                         quality_4_count=round(distribution[3] + distribution[8], decimals),
+                         quality_5_count=round(distribution[4] + distribution[9], decimals))
+
 def calculate_iterations(iterations: int, 
                          transition_matrix: np.array, 
                          starting_distribution: np.array) -> ResultRequest:
@@ -210,16 +228,7 @@ def calculate_iterations(iterations: int,
     # So we lift the matrix to the power of 2 * number_of_iterations.
     distribution = starting_distribution @ \
         np.linalg.matrix_power(transition_matrix, 2 * iterations)
-    #Note: Entry 0 in our distribution is the percentage of quality 1 items
-    #that just left the recycling machine,
-    #entry 5 is the percentage of quality of 1 items that just left the assembly machine.
-    #We add those together to get the total number of quality 1 items. 
-    #Similarly for the other qualities.
-    result_request = ResultRequest(quality_1_count=distribution[0] + distribution[5],
-                                   quality_2_count=distribution[1] + distribution[6],
-                                   quality_3_count=distribution[2] + distribution[7],
-                                   quality_4_count=distribution[3] + distribution[8],
-                                   quality_5_count=distribution[4] + distribution[9])
+    result_request = calculate_result_request(distribution)
     return result_request
 
 def run_simulation(computation_request: ComputationRequest) -> ResultRequest:
