@@ -87,7 +87,10 @@ if st.button("Calculate"):
         
     result_request = run_simulation(computation_request)
     st.success("Simulation completed.")
-    st.success(f"After {number_of_iterations} iterations you can expect:")
+    if number_of_iterations == 1:
+        st.success("After 1 iteration you can expect:")
+    else:
+        st.success(f"After {number_of_iterations} iterations you can expect:")
     st.success(f"{result_request.quality_1_count} normal quality items.")
     st.success(f"{result_request.quality_2_count} uncommon quality items.")
     st.success(f"{result_request.quality_3_count} rare quality items.")
