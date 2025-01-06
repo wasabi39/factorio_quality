@@ -4,6 +4,7 @@ Streamlit is a Python library that makes it easy to create web apps
 for machine learning, data science, etc.
 """
 
+import requests
 import streamlit as st
 from frontend.computation_request import ComputationRequest
 from backend.backend import run_simulation
@@ -69,9 +70,7 @@ quality_4_count = st.number_input("Enter the count of epic quality items you sta
                                   min_value=0,
                                   max_value=1000000)
 
-
-if st.button("Calculate"):
-    computation_request = ComputationRequest(
+computation_request = ComputationRequest(
         productivity_boost_from_research=productivity_boost_from_research,
         machine_type=machine_type,
         quality_of_production_modules=quality_of_production_modules,
@@ -83,19 +82,24 @@ if st.button("Calculate"):
         quality_2_count=quality_2_count,
         quality_3_count=quality_3_count,
         quality_4_count=quality_4_count)
-        
-    result_request = run_simulation(computation_request)
-    st.success("Simulation completed.")
-    if number_of_iterations == 1:
-        st.success("After 1 iteration you can expect:")
-    else:
-        st.success(f"After {number_of_iterations} iterations you can expect:")
-    st.success(f"{result_request.quality_1_count} normal quality items.")
-    st.success(f"{result_request.quality_2_count} uncommon quality items.")
-    st.success(f"{result_request.quality_3_count} rare quality items.")
-    st.success(f"{result_request.quality_4_count} epic quality items.")
-    st.success(f"{result_request.quality_5_count} legendary quality items.")
 
+if st.button("Run Simulation"):
+    response = requests.post("http://backend:8000/simulate", json=computation_request.dict())
+    if response.status_code == 200:
+        result = response.json()
+        st.success("Simulation completed.")
+        if number_of_iterations == 1:
+            st.success("After 1 iteration you can expect:")
+        else:
+            st.success(f"After {number_of_iterations} iterations you can expect:")
+        st.success(f"{result["quality_1_count"]} normal quality items.")
+        st.success(f"{result["quality_2_count"]} uncommon quality items.")
+        st.success(f"{result["quality_3_count"]} rare quality items.")
+        st.success(f"{result["quality_4_count"]} epic quality items.")
+        st.success(f"{result["quality_5_count"]} legendary quality items.")
+    else:
+        st.write("Error: ", response.status_code)
+    
 #Sidebar for extra functionality
 st.sidebar.header("About")
 st.sidebar.page_link(page="https://github.com/wasabi39/factorio_quality", 
