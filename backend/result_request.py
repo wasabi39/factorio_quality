@@ -12,6 +12,9 @@ which aren't necessarily integers.
 from pydantic import BaseModel
 
 class ResultRequest(BaseModel):
+    """
+    Data model for sending the result of simulation requests from backend to frontend.
+    """
     quality_1_count: float
     quality_2_count: float
     quality_3_count: float

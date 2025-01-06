@@ -10,6 +10,9 @@ into a frontend and a backend.
 from pydantic import BaseModel
 
 class ComputationRequest(BaseModel):
+    """
+    Data model for sending simulation requests from frontend to backend.
+    """
     productivity_boost_from_research: float
     machine_type: str
     quality_of_production_modules: str
