@@ -10,7 +10,7 @@ To run the Streamlit app, run ```docker-compose up --build``` from the base dire
 
 ~~Add constraints on inputs (e.g. no negative numbers)~~
 
-~~Unit tests ~~
+~~Unit tests~~
 
 API / separation of concerns
 
