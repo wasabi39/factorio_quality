@@ -48,14 +48,22 @@ number_of_iterations = st.number_input("Enter the number of iterations:",
                                        min_value=1,
                                        max_value=1000)
 
-quality_1_count = st.number_input(
-    "Enter the count of normal quality items you start out with:", value=1)
-quality_2_count = st.number_input(
-    "Enter the count of uncommon quality items you start out with:", value=0)
-quality_3_count = st.number_input(
-    "Enter the count of rare quality items you start out with:", value=0)
-quality_4_count = st.number_input(
-    "Enter the count of epic quality items you start out with:", value=0)
+quality_1_count = st.number_input("Enter the count of normal quality items you start out with:", 
+                                  value=1,
+                                  min_value=0,
+                                  max_value=1000000)
+quality_2_count = st.number_input("Enter the count of uncommon quality items you start out with:", 
+                                  value=0,
+                                  min_value=0,
+                                  max_value=1000000)
+quality_3_count = st.number_input("Enter the count of rare quality items you start out with:", 
+                                  value=0,
+                                  min_value=0,
+                                  max_value=1000000)
+quality_4_count = st.number_input("Enter the count of epic quality items you start out with:", 
+                                  value=0,
+                                  min_value=0,
+                                  max_value=1000000)
 
 
 result = None
