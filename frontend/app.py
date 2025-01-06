@@ -9,7 +9,8 @@ from frontend.computation_request import ComputationRequest
 from backend.backend import run_simulation
 
 #Sets the page title and icon (in the <head>).
-st.set_page_config(page_title="Factorio Quality Calculator", page_icon="🚀")
+st.set_page_config(page_title="Factorio Quality Calculator", 
+                   page_icon="🚀")
 
 #Creates a <h1> title (in the <body>).
 st.title("Factorio Quality Calculator")
@@ -94,5 +95,7 @@ if st.button("Calculate"):
     st.success(f"{result_request.quality_5_count} legendary quality items.")
 
 #Sidebar for extra functionality
-st.sidebar.header("Extra Tools")
-st.sidebar.write("WIP.")
+st.sidebar.header("About")
+st.sidebar.page_link(page="https://github.com/wasabi39/factorio_quality", 
+                     label="Source code on Github 😊")
+
