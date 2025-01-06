@@ -1,8 +1,17 @@
+"""
+Since this a small personal project, I have decided to write
+just a small handful of test cases for the backend.
+The most important things to test are that the end result
+and that the transition matrix are generated correctly.
+The main purpose of testing the backend is to ensure that
+the Markov chain calculations do not break during refactoring.
+"""
+
 import unittest
 from unittest.mock import patch
 import numpy as np
 
-from backend.backend import generate_transition_matrix
+from backend.backend import generate_transition_matrix, run_simulation
 from frontend.computation_request import ComputationRequest
 
 class TestBackend(unittest.TestCase):
@@ -33,6 +42,30 @@ class TestBackend(unittest.TestCase):
             self.assertAlmostEqual(np.sum(result[row]), 
                                    expected_row_sums[row],
                                    places=5)
+            
+    def test_entire_backend(self):
+        #Call the very-top level function in backend.py with a realistic
+        #simulation request to ensure that the entire script is working as intended.
+        computation_request = ComputationRequest(
+            productivity_boost_from_research=1.50,
+            machine_type="Electromagnetic plant",
+            quality_of_production_modules="Legendary",
+            number_of_productivity_modules=1,
+            quality_of_quality_modules="Legendary",
+            number_of_quality_modules=4,
+            number_of_iterations=10,
+            quality_1_count=1000,
+            quality_2_count=1000,
+            quality_3_count=1000,
+            quality_4_count=1000)
+        
+        result = run_simulation(computation_request)
+        
+        self.assertAlmostEqual(result.quality_1_count, 0.42, places=2)
+        self.assertAlmostEqual(result.quality_2_count, 2.91, places=2)
+        self.assertAlmostEqual(result.quality_3_count, 10.18, places=2)
+        self.assertAlmostEqual(result.quality_4_count, 24.11, places=2)
+        self.assertAlmostEqual(result.quality_5_count, 6182.18, places=2)
 
 
 if __name__ == '__main__':
