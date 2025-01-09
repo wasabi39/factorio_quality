@@ -6,7 +6,7 @@ for machine learning, data science, etc.
 
 import requests
 import streamlit as st
-from frontend.computation_request import ComputationRequest
+from computation_request import ComputationRequest
 
 
 def create_computation_request():
