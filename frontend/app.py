@@ -7,7 +7,6 @@ for machine learning, data science, etc.
 import requests
 import streamlit as st
 from frontend.computation_request import ComputationRequest
-from backend.backend import run_simulation
 
 #Sets the page title and icon (in the <head>).
 st.set_page_config(page_title="Factorio Quality Calculator", 
@@ -84,7 +83,9 @@ computation_request = ComputationRequest(
         quality_4_count=quality_4_count)
 
 if st.button("Run Simulation"):
-    response = requests.post("http://backend:8000/simulate", json=computation_request.model_dump())
+    response = requests.post("http://backend:8000/simulate", 
+                             json=computation_request.model_dump(), 
+                             timeout=10)
     if response.status_code == 200:
         result = response.json()
         st.success("Simulation completed.")
