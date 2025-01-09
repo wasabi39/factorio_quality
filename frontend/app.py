@@ -4,10 +4,12 @@ Streamlit is a Python library that makes it easy to create web apps
 for machine learning, data science, etc.
 """
 
+import sys
 import requests
 import os
 import streamlit as st
 from computation_request import ComputationRequest
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'backend')))
 import backend
 
 
