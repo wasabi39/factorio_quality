@@ -8,7 +8,7 @@ import requests
 import os
 import streamlit as st
 from computation_request import ComputationRequest
-from backend.backend import run_simulation
+import backend
 
 
 def create_computation_request():
@@ -105,7 +105,7 @@ def run_simulation():
                                         json=computation_request.model_dump(), 
                                         timeout=10)
             else:
-                response = run_simulation(computation_request)
+                response = backend.run_simulation(computation_request)
             if response.status_code == 200:
                 result = response.json()
                 display_results(result, computation_request.number_of_iterations)
