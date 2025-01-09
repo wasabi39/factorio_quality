@@ -4,13 +4,9 @@ Streamlit is a Python library that makes it easy to create web apps
 for machine learning, data science, etc.
 """
 
-import sys
 import requests
-import os
 import streamlit as st
 from computation_request import ComputationRequest
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'backend')))
-import backend
 
 
 def create_computation_request():
@@ -102,12 +98,9 @@ def run_simulation():
     computation_request = create_computation_request()
     if st.button("Run Simulation"):
         try:
-            if "RUNNING_THROUGH_DOCKER" in os.environ:
-                response = requests.post("http://backend:8000/simulate", 
-                                        json=computation_request.model_dump(), 
-                                        timeout=10)
-            else:
-                response = backend.run_simulation(computation_request)
+            response = requests.post("http://backend:8000/simulate", 
+                                     json=computation_request.model_dump(), 
+                                     timeout=10)
             if response.status_code == 200:
                 result = response.json()
                 display_results(result, computation_request.number_of_iterations)

@@ -15,8 +15,6 @@ COPY . .
 #(might require a bit of refactoring in other files)
 ENV PYTHONPATH=/app
 
-ENV RUNNING_THROUGH_DOCKER=1
-
 RUN python -m unittest discover -s tests
 
 EXPOSE 5000
