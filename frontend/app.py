@@ -84,7 +84,7 @@ computation_request = ComputationRequest(
         quality_4_count=quality_4_count)
 
 if st.button("Run Simulation"):
-    response = requests.post("http://backend:8000/simulate", json=computation_request.dict())
+    response = requests.post("http://backend:8000/simulate", json=computation_request.model_dump())
     if response.status_code == 200:
         result = response.json()
         st.success("Simulation completed.")
