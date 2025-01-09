@@ -142,6 +142,36 @@ def chip_type_to_number(chip_type: str) -> int:
     #but the frontend should ensure that the chip type is valid.
     return ["Normal", "Uncommon", "Rare", "Epic", "Legendary"].index(chip_type) + 1
 
+def get_upper_right_of_transition_matrix(request: ComputationRequest) -> np.array:
+    """
+    Returns the upper right of the transition matrix.
+    """
+    prod_boost = calculate_productivity_boost(
+        request.number_of_productivity_modules,
+        chip_type_to_number(request.quality_of_production_modules), 
+        False, 
+        is_electromagnetic_plant(request.machine_type),
+        request.productivity_boost_from_research)
+    qual_boost = calculate_quality_boost(request.number_of_quality_modules,
+                                         chip_type_to_number(request.quality_of_quality_modules))
+    return get_part_of_transition_matrix(prod_boost, 
+                                         qual_boost, 
+                                         recycling=False)
+
+def get_lower_left_of_transition_matrix() -> np.array:
+    """
+    Returns the lower left of the transition matrix.
+    """
+    productivity_boost = calculate_productivity_boost(recycling=True, 
+                                                      fifty_percent_boost=False)
+    #I've chosen to hardcode the recycling step, since noone will realistically
+    #want to experiment with it.
+    quality_boost = calculate_quality_boost(number_of_quality_chips=4, 
+                                            type_of_quality_boost=5)
+    return get_part_of_transition_matrix(productivity_boost, 
+                                         quality_boost, 
+                                         recycling=True)
+
 def generate_transition_matrix(computation_request: ComputationRequest):
     """
     Returns the transition matrix for the Markov chain.
@@ -149,36 +179,9 @@ def generate_transition_matrix(computation_request: ComputationRequest):
     #See https://wiki.factorio.com/Quality for information on how 
     #the transition matrix is constructed.
     upper_left = get_upper_left_of_transition_matrix()
+    upper_right = get_upper_right_of_transition_matrix(computation_request)
+    lower_left = get_lower_left_of_transition_matrix()
     bottom_right = get_bottom_right_of_transition_matrix()
-    
-    productivity_boost_assembly = calculate_productivity_boost(
-        number_of_productivity_chips=computation_request.number_of_productivity_modules,
-        type_of_productivity_chip=chip_type_to_number(
-                                        computation_request.quality_of_production_modules), 
-        recycling=False, 
-        fifty_percent_boost=is_electromagnetic_plant(computation_request.machine_type),
-        research_boost=computation_request.productivity_boost_from_research)
-    qual_boost_assembly = calculate_quality_boost(number_of_quality_chips=
-                                                 computation_request.number_of_quality_modules,
-                                                 type_of_quality_boost=chip_type_to_number(
-                                                 computation_request.quality_of_quality_modules))
-
-    upper_right = get_part_of_transition_matrix(productivity_boost_assembly, 
-                                                qual_boost_assembly, 
-                                                recycling=False)
-
-    productivity_boost_for_recycling = calculate_productivity_boost(
-                                                                    recycling=True, 
-                                                                    fifty_percent_boost=False)
-    #I've chosen to hardcode the recycling step, since noone will realistically
-    #want to experiment with it.
-    quality_boost_for_recycling = calculate_quality_boost(
-                                                    number_of_quality_chips=4, 
-                                                    type_of_quality_boost=5)
-
-    lower_left = get_part_of_transition_matrix(productivity_boost_for_recycling, 
-                                               quality_boost_for_recycling, 
-                                               recycling=True)
 
     transition_matrix = concatenate_transition_matrices(upper_left, 
                                                         upper_right, 
