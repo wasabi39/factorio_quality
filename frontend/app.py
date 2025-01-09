@@ -5,8 +5,10 @@ for machine learning, data science, etc.
 """
 
 import requests
+import os
 import streamlit as st
 from computation_request import ComputationRequest
+from backend.backend import run_simulation
 
 
 def create_computation_request():
@@ -98,9 +100,12 @@ def run_simulation():
     computation_request = create_computation_request()
     if st.button("Run Simulation"):
         try:
-            response = requests.post("http://backend:8000/simulate", 
-                                     json=computation_request.model_dump(), 
-                                     timeout=10)
+            if "RUNNING_THROUGH_DOCKER" in os.environ:
+                response = requests.post("http://backend:8000/simulate", 
+                                        json=computation_request.model_dump(), 
+                                        timeout=10)
+            else:
+                response = run_simulation(computation_request)
             if response.status_code == 200:
                 result = response.json()
                 display_results(result, computation_request.number_of_iterations)
