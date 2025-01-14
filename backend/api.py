@@ -1,3 +1,9 @@
+"""
+API for simulation requests. 
+The frontend sends a POST request to the backend to run a simulation,
+and gets the result back in return.
+"""
+
 from fastapi import FastAPI
 import uvicorn
 from backend.backend import run_simulation
