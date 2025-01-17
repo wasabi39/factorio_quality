@@ -45,10 +45,10 @@ The situation outlined here is a stochastic process which shares many similariti
 
 ~~Cache dependencies in Dockerfile to save build time.~~
 
-Make frontend prettier
+~~Make frontend prettier~~
 
 Host the project online somewhere
 
-Finish refactoring backend and directory structure now that API is functional
+~~Finish refactoring backend and directory structure now that API is functional~~
 
-Refactor app.py
+~~Refactor app.py~~
