@@ -1,6 +1,6 @@
 # Factorio Quality Calculator
 
-Markov chain simulations of production quality in the video game Factorio.[The web app can be accessed here](https://factorio-quality.streamlit.app/).
+Markov chain simulations of production quality in the video game Factorio. [The web app can be accessed here](https://factorio-quality.streamlit.app/).
 
 ## Project Overview
 
