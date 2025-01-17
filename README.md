@@ -1,6 +1,6 @@
 # Factorio Quality Calculator
 
-Markov chain simulations of production quality in the video game Factorio. WIP.
+Markov chain simulations of production quality in the video game Factorio.[The web app can be accessed here](https://factorio-quality.streamlit.app/).
 
 ## Project Overview
 
@@ -10,9 +10,11 @@ The project is a single page web application consisting of:
 
 Streamlit is used for building simple frontends for data-intensive applications. The entire project is built using Docker.
 
+Unfortunately having an API made it harder to host the finished project online for free. To get around this, this project has 2 branches: ```main``` and ```streamlit```. The ```main``` branch contains the finished app, ready to be run locally through Docker. The ```streamlit``` contains an uglier, API-less version of the code which is solely used to deploy the web app [here](https://factorio-quality.streamlit.app/). The finished project on the two branches is identical, the ```main``` branch just has more readable and maintainable code as well as more up-to-date documentation.
+
 ## Running the project
 
-To run the Streamlit app, run ```docker-compose up --build``` from the base directory. This will install Python and its dependencies, run the unit tests and then start the project. After that the project can be found at ```localhost:8501/```.
+To run the Streamlit app, run ```docker-compose up --build``` from the base directory on the ```main``` branch. This will install Python and its dependencies, run the unit tests and then start the project. After that the project can be found at ```localhost:8501/```.
 
 ## About the simulations in the project
 
@@ -29,26 +31,3 @@ These two steps are repeated indefinitely. The fraction of initial ingredients t
 The purpose of this app is to allow a user to experiment with how these various factors impact the number of ingredients needed to produce high quality items.
 
 The situation outlined here is a stochastic process which shares many similarities with [Markov chains](https://en.wikipedia.org/wiki/Markov_chain). As a result, an algorithm heavily inspired by Markov chain theory was developed and implemented in the backend as part of this project.
-
-## Todo
-~~Make frontend functional~~
-
-~~Add constraints on inputs (e.g. no negative numbers)~~
-
-~~Unit tests~~
-
-~~Get API working~~
-
-~~Proper directory structure~~
-
-~~Adjust Pylint Github workflow to suit the project's needs better.~~
-
-~~Cache dependencies in Dockerfile to save build time.~~
-
-~~Make frontend prettier~~
-
-Host the project online somewhere
-
-~~Finish refactoring backend and directory structure now that API is functional~~
-
-~~Refactor app.py~~
