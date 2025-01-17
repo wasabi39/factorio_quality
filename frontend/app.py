@@ -121,7 +121,13 @@ def main():
     run_simulation()
     #Sidebar for extra functionality
     st.sidebar.header("About")
+    st.sidebar.markdown("This app calculates the expected number of items of each quality " +
+                        "level after a certain number of iterations in Factorio.")
+    st.sidebar.markdown("One iteration is the act of producing an item, " +
+                        "and then recycling it if it's not legendary quality.")
+    st.sidebar.markdown("The simulation assumes you're using legendary quality modules 3 " +
+                        "in your recycling machines.")
     st.sidebar.markdown("[Source code on Github 😊](https://github.com/wasabi39/factorio_quality)")
-
+        
 if __name__ == "__main__":
     main()

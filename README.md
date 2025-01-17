@@ -12,7 +12,7 @@ Streamlit is used for building simple frontends for data-intensive applications.
 
 ## Running the project
 
-To run the Streamlit app, run ```docker-compose up --build``` from the base directory. This will install Python and its dependencies, run the unit tests and then start the project. After that the project can be found at ```localhost:5000/```.
+To run the Streamlit app, run ```docker-compose up --build``` from the base directory. This will install Python and its dependencies, run the unit tests and then start the project. After that the project can be found at ```localhost:8501/```.
 
 ## About the simulations in the project
 
