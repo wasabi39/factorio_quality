@@ -67,16 +67,15 @@ def get_probabilities_of_upgrading(productivity_boost=1, quality_boost=1):
         (1 + productivity_boost) * quality_boost * 1 / 1000
     ]
 
-def get_part_of_transition_matrix(productivity_boost, quality_boost, recycling=False):
+def get_base_matrix(productivity_boost, quality_boost):
     """
-    Returns upper right of the transition matrix if recycling is False,
-    otherwise returns lower left of the transition matrix.
+    Returns the base matrix for calculating the upper right or
+    lower left part of the transition matrix.
     """
-    if recycling:
-        productivity_boost = -0.75
     prob = get_probabilities_of_upgrading(productivity_boost, quality_boost)
-
-    base_matrix = [
+    #See https://wiki.factorio.com/Quality 
+    #for information on how the transition matrix is calculated.
+    return [
         [prob[0], prob[1], prob[2], prob[3], 1 + productivity_boost - np.sum(prob[0:4])],
         [0, prob[0], prob[1], prob[2], 1 + productivity_boost - np.sum(prob[0:3])],
         [0, 0, prob[0], prob[1], 1 + productivity_boost - np.sum(prob[0:2])],
@@ -84,11 +83,21 @@ def get_part_of_transition_matrix(productivity_boost, quality_boost, recycling=F
         [0, 0, 0, 0, 1 + productivity_boost]
     ]
 
+def get_part_of_transition_matrix(productivity_boost, quality_boost, recycling=False):
+    """
+    Returns the upper right part of the transition matrix if recycling is False.
+    Returns the lower left part of the transition matrix if recycling is True.
+    """
+    if recycling:
+        productivity_boost = -0.75
+
+    base_matrix = get_base_matrix(productivity_boost, quality_boost)
+
     if recycling:
         #We don't recycle legendary items, so when recycling we set
         #the probability of producing a legendary item from legendary ingredients to 0.
         base_matrix[-1] = [0, 0, 0, 0, 0]
-    
+
     return np.array(base_matrix)    
 
 def concatenate_transition_matrices(upper_left, 
@@ -175,6 +184,8 @@ def get_lower_left_of_transition_matrix() -> np.array:
 def generate_transition_matrix(computation_request: ComputationRequest):
     """
     Returns the transition matrix for the Markov chain.
+    The transition matrix is a massive 10x10 matrix,
+    so we generate it in parts and concatenate them at the end.
     """
     #See https://wiki.factorio.com/Quality for information on how 
     #the transition matrix is constructed.
@@ -228,7 +239,7 @@ def calculate_iterations(iterations: int,
     """
     #IMPORTANT: A full cycle is 2 iterations, 
     #because the assembly machine and the recycling machine are in a cycle. 
-    # So we lift the matrix to the power of 2 * number_of_iterations.
+    #So we lift the matrix to the power of 2 * number_of_iterations.
     distribution = starting_distribution @ \
         np.linalg.matrix_power(transition_matrix, 2 * iterations)
     result_request = calculate_result_request(distribution)
