@@ -32,7 +32,9 @@ def create_computation_request():
         "Choose a quality of production modules:", 
         ["Normal", "Uncommon", "Rare", "Epic", "Legendary"])
     number_of_productivity_modules = st.number_input(
-        "Enter the number of productivity modules:", value=0)
+        "Enter the number of productivity modules:", value=0, 
+        min_value=0, 
+        max_value=8)
     
     quality_of_quality_modules = st.selectbox(
         "Choose a quality of quality modules:", 
