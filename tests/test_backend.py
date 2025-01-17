@@ -10,8 +10,8 @@ the Markov chain calculations do not break during refactoring.
 import unittest
 import numpy as np
 
-from backend.backend import generate_transition_matrix, run_simulation
-from frontend.computation_request import ComputationRequest
+from backend import generate_transition_matrix, run_simulation
+from computation_request import ComputationRequest
 
 class TestBackend(unittest.TestCase):
     def test_generate_transition_matrix(self):

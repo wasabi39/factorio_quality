@@ -9,9 +9,8 @@ I made the unusual choice to organize the code into a few big functions for a co
    So I didn't want to spend too much time on building the Streamlit frontend.
 """
 
-import requests
 import streamlit as st
-from backend import backend
+import backend
 from computation_request import ComputationRequest
 
 

@@ -11,8 +11,8 @@ compared to the base machine. Same thing goes for quality boost.
 
 
 import numpy as np
-from backend.result_request import ResultRequest
-from frontend.computation_request import ComputationRequest
+from result_request import ResultRequest
+from computation_request import ComputationRequest
 
 def get_quality_chip_score():
     """
