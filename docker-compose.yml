@@ -1,13 +1,5 @@
-#We don't have to add any health checks or dependencies between services, 
-#because the services start incredibly quickly and aren't dependent on each other 
-#(at least until the user makes an API request).
 services:
-  frontend:
+  web:
     build: .
     ports:
       - "8501:8501"
-  backend:
-    build: .
-    ports:
-      - "8000:8000"
-    command: ["uvicorn", "backend.api:app", "--host", "0.0.0.0", "--port", "8000"]

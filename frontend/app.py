@@ -11,6 +11,7 @@ I made the unusual choice to organize the code into a few big functions for a co
 
 import requests
 import streamlit as st
+from backend import backend
 from computation_request import ComputationRequest
 
 
@@ -89,11 +90,11 @@ def display_results(result, number_of_iterations):
         st.success("After 1 iteration you can expect:")
     else:
         st.success(f"After {number_of_iterations} iterations you can expect:")
-    st.success(f"{result['quality_1_count']} normal quality items.")
-    st.success(f"{result['quality_2_count']} uncommon quality items.")
-    st.success(f"{result['quality_3_count']} rare quality items.")
-    st.success(f"{result['quality_4_count']} epic quality items.")
-    st.success(f"{result['quality_5_count']} legendary quality items.")
+    st.success(f"{result.quality_1_count} normal quality items.")
+    st.success(f"{result.quality_2_count} uncommon quality items.")
+    st.success(f"{result.quality_3_count} rare quality items.")
+    st.success(f"{result.quality_4_count} epic quality items.")
+    st.success(f"{result.quality_5_count} legendary quality items.")
     
 def run_simulation():
     """
@@ -102,17 +103,9 @@ def run_simulation():
     """
     computation_request = create_computation_request()
     if st.button("Run Simulation"):
-        try:
-            response = requests.post("http://backend:8000/simulate", 
-                                     json=computation_request.model_dump(), 
-                                     timeout=10)
-            if response.status_code == 200:
-                result = response.json()
-                display_results(result, computation_request.number_of_iterations)
-            else:
-                st.write("Error: ", response.status_code)
-        except requests.exceptions.RequestException as e:
-            st.write("An error occurred: ", e)
+        result = backend.run_simulation(computation_request)
+        display_results(result, computation_request.number_of_iterations)
+
 
 def main():
     """
